@@ -22,7 +22,6 @@ class Queue:
         self.count = 0
 
     def insert(self, val):
-        print(self.write)
         self.queue[self.write] = val
         if(self.count>2):
             if(self.write==self.read):
@@ -42,7 +41,7 @@ class Queue:
     def getAll(self):
         x = self.write-1
         temp = []
-        while(x != self.read):
+        while(x != self.write):
             temp.append(self.queue[x])
             x-=1
             if(x<0): x = self.len-1
@@ -51,12 +50,12 @@ class Queue:
 
 class Calculator:
     def __init__(self):
-        self.historyFile = open("E:\\Computer Science\\Programs\\Python\\history.txt", 'r+', encoding = "utf-8")
+        self.historyFile = open("history.txt", 'r+', encoding = "utf-8")
         hist = self.historyFile.read()
         self.empty = 1                             #This variable helps as an indicator for setting the expression to 0 when an input is given after calculating result
         self.history = Queue(20)
         for each in hist.split("\n"):
-            print(hist)
+            print(each)
             self.history.insert(each)
         self.historytxt = "\n".join(self.history.getAll())
         self.top = tk.Toplevel()
@@ -316,11 +315,13 @@ class Calculator:
 
         self.history.insert(self.expression + " = " + self.result)
         self.historytxt = "\n".join(self.history.getAll())
-        self.historyFile.truncate(0)
+        self.historyFile.seek(0)
+        self.historyFile.truncate()
         for each in self.history.getAll():
             self.historyFile.write(each)
             self.historyFile.write("\n")
-            print(each, "\n")
+            print(each)
+        print(self.history.getAll())
         self.historymsg.insert(0.0, self.expression + " = " + self.result + "\n")
         self.historymsg.update()
         
